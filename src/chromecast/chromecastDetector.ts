@@ -40,13 +40,16 @@ export class ChromecastDetector extends EventEmitter {
   private discoveryInterval: NodeJS.Timeout | null = null;
   private probeInterval: NodeJS.Timeout | null = null;
   private lastKnownAddress: string | null = null;
+  private seenDevices: Set<string> = new Set(); // Track seen devices to avoid duplicate logs
 
-  constructor(private targetName: string = "Android TV") {
+  constructor(private targetName: string) {
     super();
   }
 
   public start(): this {
-    console.log(`Looking for "${this.targetName}"...`);
+    console.log(
+      `Starting Chromecast detection (targeting "${this.targetName}")...`
+    );
 
     this.browser = createBrowser(tcp("googlecast"));
 
@@ -59,7 +62,9 @@ export class ChromecastDetector extends EventEmitter {
     }, 1000);
 
     this.browser?.on("update", async (data: ServiceRecord) => {
-      if (!data.addresses?.length) return;
+      if (!data.addresses?.length) {
+        return;
+      }
 
       const device: Device = {
         name:
@@ -68,19 +73,37 @@ export class ChromecastDetector extends EventEmitter {
         address: data.addresses[0],
       };
 
+      const deviceKey = `${device.name}-${device.address}`;
+
+      // Log new devices only once
+      if (!this.seenDevices.has(deviceKey)) {
+        this.seenDevices.add(deviceKey);
+        console.log(
+          `Found Chromecast device: "${device.name}" at ${device.address}`
+        );
+      }
+
+      // Store all devices
+      this.devices.set(device.address, device);
+
+      // Handle target device specifically
       if (device.name === this.targetName) {
         this.lastKnownAddress = device.address;
 
         if (!this.probeInterval) {
-          console.log(`Found "${this.targetName}" at ${device.address}`);
+          console.log(
+            `Target device "${this.targetName}" found at ${device.address}`
+          );
           this.startProbing();
         }
-
-        this.devices.set(device.address, device);
       }
     });
 
     return this;
+  }
+
+  public getDiscoveredDevices(): Device[] {
+    return Array.from(this.devices.values());
   }
 
   private async checkDeviceStatus(address: string): Promise<DeviceStatus> {
@@ -143,7 +166,9 @@ export class ChromecastDetector extends EventEmitter {
   }
 
   private async probeDevice(): Promise<void> {
-    if (!this.lastKnownAddress) return;
+    if (!this.lastKnownAddress) {
+      return;
+    }
 
     try {
       const status = await this.checkDeviceStatus(this.lastKnownAddress);
@@ -175,5 +200,7 @@ export class ChromecastDetector extends EventEmitter {
       clearInterval(this.probeInterval);
       this.probeInterval = null;
     }
+    this.seenDevices.clear();
+    this.devices.clear();
   }
 }

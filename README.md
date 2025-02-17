@@ -30,6 +30,8 @@ Wroks with almost all models but it's a bit slow:
 
 When your epson projector has a built-in chromecast, you can change the configuration to this:
 
+| Just turn `useChromecast` to true and use "Android TV" as `chromecastName`. If your chrome cast has a different name, you will see it in the plugin logs - it will be something different than `Unknown Device`.
+
 ```json
 {
   "name": "homebridge-epson-powerstate",
@@ -39,13 +41,13 @@ When your epson projector has a built-in chromecast, you can change the configur
       "name": "My Epson Projector",
       "ip": "192.168.1.99",
       "useChromecast": true,
-      "chromecastName": "Android TV" // must match the name of the chromecast device in the network
+      "chromecastName": "Android TV"
     }
   ]
 }
 ```
 
-### Troubleshooting
+### Troubleshooting Development
 
 For any developers who want to run this - the most common error occuring when trying to run `npm run watch` locally will be that the `config` plugin is not found. I never found out the proper way to solve that, so my workaround is:
 
