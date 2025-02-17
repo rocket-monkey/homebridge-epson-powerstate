@@ -36,7 +36,7 @@ export class EpsonPowerStatePlatform implements DynamicPlatformPlugin {
   constructor(
     public readonly log: Logging,
     public readonly config: PlatformConfig,
-    public readonly api: API
+    public readonly api: API,
   ) {
     this.Service = api.hap.Service;
     this.Characteristic = api.hap.Characteristic;
@@ -95,7 +95,7 @@ export class EpsonPowerStatePlatform implements DynamicPlatformPlugin {
         // the accessory already exists
         this.log.info(
           "Restoring existing accessory from cache:",
-          existingAccessory.displayName
+          existingAccessory.displayName,
         );
 
         // if you need to update the accessory.context then you should run `api.updatePlatformAccessories`. e.g.:
@@ -142,7 +142,7 @@ export class EpsonPowerStatePlatform implements DynamicPlatformPlugin {
       if (!this.discoveredCacheUUIDs.includes(uuid)) {
         this.log.info(
           "Removing existing accessory from cache:",
-          accessory.displayName
+          accessory.displayName,
         );
         this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
           accessory,
