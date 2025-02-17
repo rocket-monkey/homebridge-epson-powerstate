@@ -5,28 +5,36 @@
   "strictValidation": false,
   "schema": {
     "type": "object",
-    "properties": {
-      "name": {
-        "title": "Name",
-        "type": "string",
-        "required": true,
-        "default": "Projector accessory name"
-      },
-      "ip": {
-        "title": "Ip",
-        "type": "string",
-        "required": true,
-        "default": "The IP address of the projector"
-      },
-      "useChromecast": {
-        "title": "Use chromecast",
-        "type": "boolean",
-        "default": "Should chromecast be used to determine the projector power state"
-      },
-      "chromecastName": {
-        "title": "Chromecast name",
-        "type": "string",
-        "default": "The name of the chromecast device in the network (e.g. 'Android TV')"
+    "devices": {
+      "type": "array",
+      "additionalItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string",
+            "required": true,
+            "default": "Projector accessory name"
+          },
+          "ip": {
+            "title": "Ip",
+            "type": "string",
+            "required": true,
+            "default": "The IP address of the projector"
+          },
+          "useChromecast": {
+            "title": "Use chromecast",
+            "type": "boolean",
+            "default": "Should chromecast be used to determine the projector power state"
+          },
+          "chromecastName": {
+            "title": "Chromecast name",
+            "type": "string",
+            "default": "The name of the chromecast device in the network (e.g. 'Android TV')"
+          }
+        }
       }
     }
   }
