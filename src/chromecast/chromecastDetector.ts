@@ -66,12 +66,17 @@ export class ChromecastDetector extends EventEmitter {
         return;
       }
 
+      const name =
+        data.txt?.find((txt) => txt.startsWith("fn="))?.slice(3) ||
+        "Unknown Device";
       const device: Device = {
-        name:
-          data.txt?.find((txt) => txt.startsWith("fn="))?.slice(3) ||
-          "Unknown Device",
+        name,
         address: data.addresses[0],
       };
+
+      if (name === "Unknown Device") {
+        return;
+      }
 
       const deviceKey = `${device.name}-${device.address}`;
 
@@ -140,9 +145,11 @@ export class ChromecastDetector extends EventEmitter {
           if (!resolved) {
             resolved = true;
             cleanup();
+            const isStandBy =
+              typeof status.isStandBy === "undefined" ? true : status.isStandBy;
             resolve({
-              isOn: true,
-              isStandBy: status.isStandBy || false,
+              isOn: !isStandBy,
+              isStandBy: isStandBy,
             });
           }
         });

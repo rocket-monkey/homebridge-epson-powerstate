@@ -1,11 +1,3 @@
-<p align="center">
-
-<img src="https://github.com/homebridge/branding/raw/latest/logos/homebridge-wordmark-logo-vertical.png" width="150">
-
-</p>
-
-<span align="center">
-
 ## Installation
 
 Use the webinterface and search for `homebridge-epson-powerstate`, install the plugin as usual.
@@ -30,7 +22,7 @@ Wroks with almost all models but it's a bit slow:
 
 When your epson projector has a built-in chromecast, you can change the configuration to this:
 
-| Just turn `useChromecast` to true and use "Android TV" as `chromecastName`. If your chrome cast has a different name, you will see it in the plugin logs - it will be something different than `Unknown Device`.
+> Just turn `useChromecast` to true and use "Android TV" as `chromecastName`. If your chrome cast has a different name, you will see it in the plugin logs.
 
 ```json
 {
