@@ -15,14 +15,14 @@ import type { EpsonPowerStatePlatform } from "./platform.js";
 export class PlatformEpsonAccessory {
   constructor(
     private readonly platform: EpsonPowerStatePlatform,
-    private readonly accessory: PlatformAccessory
+    private readonly accessory: PlatformAccessory,
   ) {
     // set accessory information
     this.accessory
       .getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(
         this.platform.Characteristic.Manufacturer,
-        "Homebrdige Epson Powerstate by @rvetere"
+        "Homebrdige Epson Powerstate by @rvetere",
       )
       .setCharacteristic(this.platform.Characteristic.Model, "Epson Projector")
       .setCharacteristic(this.platform.Characteristic.SerialNumber, "📽️");
@@ -32,23 +32,23 @@ export class PlatformEpsonAccessory {
       this.accessory.addService(
         this.platform.Service.MotionSensor,
         "Epson Powerstate",
-        "📽️"
+        "📽️",
       );
 
     if (this.accessory.context.device.useChromecast) {
       const detector = new ChromecastDetector(
-        this.accessory.context.device.chromecastName
+        this.accessory.context.device.chromecastName,
       );
 
       detector.on("deviceUpdate", (device: DeviceUpdate) => {
         motionSensorPowerState.updateCharacteristic(
           this.platform.Characteristic.MotionDetected,
-          device.isPoweredOn
+          device.isPoweredOn,
         );
 
         this.platform.log.debug(
           `Triggering motionSensorPowerState for ${device.name}:`,
-          device.isPoweredOn
+          device.isPoweredOn,
         );
       });
 
@@ -56,18 +56,18 @@ export class PlatformEpsonAccessory {
     } else if (this.accessory.context.device.protocoll === "chromecast") {
       setInterval(async () => {
         const state = await detectPowerStateWithWebinterface(
-          this.accessory.context.device.ip
+          this.accessory.context.device.ip,
         );
 
         // push the new value to HomeKit
         motionSensorPowerState.updateCharacteristic(
           this.platform.Characteristic.MotionDetected,
-          state.isOn
+          state.isOn,
         );
 
         this.platform.log.debug(
           `Triggering motionSensorPowerState for ${this.accessory.context.device.ip}:`,
-          state.isOn
+          state.isOn,
         );
       }, 1000);
     }
