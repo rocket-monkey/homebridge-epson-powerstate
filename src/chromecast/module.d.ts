@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare module "mdns-js" {
   export interface ServiceRecord {
     addresses?: string[];
@@ -44,9 +45,31 @@ declare module "castv2-client" {
     };
   }
 
+  export class DefaultReceiver extends EventEmitter {
+    constructor();
+    close(): void;
+    stop(): void;
+  }
+
+  export class DefaultMediaReceiver extends EventEmitter {
+    constructor();
+    close(): void;
+    stop(): void;
+  }
+
+  export interface LaunchOptions {
+    appId?: string;
+    [key: string]: any;
+  }
+
   export class Client extends EventEmitter {
+    DefaultReceiver: typeof DefaultReceiver;
     connect(host: string, callback: () => void): void;
     getStatus(callback: (err: Error | null, status: CastStatus) => void): void;
+    launch(
+      App: typeof DefaultMediaReceiver,
+      callback: (err: Error | null) => void
+    ): void;
     close(): void;
   }
 }

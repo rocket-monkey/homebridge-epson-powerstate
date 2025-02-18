@@ -59,7 +59,7 @@ export class ChromecastDetector extends EventEmitter {
 
     this.discoveryInterval = setInterval(() => {
       this.browser?.discover();
-    }, 1000);
+    }, 5000);
 
     this.browser?.on("update", async (data: ServiceRecord) => {
       if (!data.addresses?.length) {
@@ -141,20 +141,34 @@ export class ChromecastDetector extends EventEmitter {
             }
             return;
           }
-
           if (!resolved) {
             resolved = true;
             cleanup();
-            const isStandBy =
-              typeof status.isStandBy === "undefined" ? true : status.isStandBy;
-            resolve({
-              isOn: !isStandBy,
-              isStandBy: isStandBy,
-            });
+            if (typeof status.isStandBy === "undefined") {
+              // check if we have applications array
+              if (status.applications && status.applications.length > 0) {
+                resolve({
+                  isOn: true,
+                  isStandBy: false,
+                });
+                return;
+              }
+
+              resolve({
+                isOn: false,
+                isStandBy: true,
+              });
+            } else {
+              resolve({
+                isOn: !status.isStandBy,
+                isStandBy: status.isStandBy,
+              });
+            }
           }
         });
       });
 
+      // Set a timeout to avoid hanging
       setTimeout(() => {
         if (!resolved) {
           resolved = true;
@@ -169,7 +183,7 @@ export class ChromecastDetector extends EventEmitter {
     this.probeDevice();
     this.probeInterval = setInterval(() => {
       this.probeDevice();
-    }, 5000);
+    }, 1000);
   }
 
   private async probeDevice(): Promise<void> {

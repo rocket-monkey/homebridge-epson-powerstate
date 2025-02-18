@@ -2,7 +2,7 @@
   "name": "homebridge-epson-powerstate",
   "displayName": "Epson Powerstate",
   "type": "module",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A short description about what your plugin does.",
   "author": "Remo Vetere <remo.vetere@gmail.com>",
   "license": "Apache-2.0",
