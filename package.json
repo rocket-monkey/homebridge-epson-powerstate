@@ -1,9 +1,9 @@
 {
   "name": "homebridge-epson-powerstate",
-  "displayName": "Epson Powerstate",
+  "displayName": "Homebridge Epson Powerstate",
   "type": "module",
-  "version": "1.2.1",
-  "description": "A short description about what your plugin does.",
+  "version": "1.2.2",
+  "description": "A homebridge plugin to determine the power state of an epson projector using web interface or built in chrome cast",
   "author": "Remo Vetere <remo.vetere@gmail.com>",
   "license": "Apache-2.0",
   "homepage": "https://github.com/rocket-monkey/homebridge-epson-powerstate#readme",
